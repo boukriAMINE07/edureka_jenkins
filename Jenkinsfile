@@ -19,14 +19,14 @@ node {
     }
 
    stage('Test image') {
-            steps {
+
                 script {
                     def workspace = pwd()
                     app.inside("-w ${workspace}") {
                         echo "Tests passed"
                     }
                 }
-            }
+            
         }
 
 
