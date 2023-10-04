@@ -19,13 +19,13 @@ node {
     }
 
   stage('Test image') {
-    steps {
+
         script {
             app.inside("-w C:/workspace") {
                 echo "Tests passed"
             }
         }
-    }
+    
 }
 
 
