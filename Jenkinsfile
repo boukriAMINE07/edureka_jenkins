@@ -7,12 +7,13 @@ node {
         checkout scm
     }
 
-    stage('Build image') {
-    /* This builds the actual image using the full path to Docker executable */
+   stage('Build image') {
+    /* This builds the actual image using 'sh' for compatibility with non-Windows nodes */
     sh 'echo "start build image"'
-    app = bat(script: '"C:/Program Files/Docker/Docker/resources/bin/docker" build -t boukri/edureka .', returnStdout: true).trim()
+    app = sh(script: 'docker build -t boukri/edureka .', returnStdout: true).trim()
     sh 'echo "end build image"'
 }
+
 
     stage('Test image') {
         /* Ideally, we would run a test framework against our image.
