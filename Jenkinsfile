@@ -1,4 +1,11 @@
 node {
+
+    agent {
+        docker {
+            image 'boukri/edureka'
+            args '-v C:/ProgramData/Jenkins/.jenkins/workspace/edureka:/workspace -w /workspace'
+        }
+    }
     def app
 
     stage('Clone repository') {
