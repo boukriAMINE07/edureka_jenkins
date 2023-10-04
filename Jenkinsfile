@@ -8,12 +8,11 @@ node {
     }
 
     stage('Build image') {
-        /* This builds the actual image; synonymous to
-         * docker build on the command line */
-        sh 'echo "start build image"'
-        app = docker.build("boukri/edureka")
-        sh 'echo "end build image"'
-    }
+    /* This builds the actual image using the full path to Docker executable */
+    sh 'echo "start build image"'
+    app = bat(script: '"C:/Program Files/Docker/Docker/resources/bin/docker" build -t boukri/edureka .', returnStdout: true).trim()
+    sh 'echo "end build image"'
+}
 
     stage('Test image') {
         /* Ideally, we would run a test framework against our image.
