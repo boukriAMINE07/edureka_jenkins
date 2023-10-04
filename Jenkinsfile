@@ -12,11 +12,17 @@ node {
         checkout scm
     }
 
-    stage('Build image') {
-        echo "start build image"
-        app = docker.build("boukri/edureka")
-        echo "end build image"
-    }
+    stage('Test image') {
+            steps {
+                script {
+                    def workspace = pwd()
+                    app.inside("-w ${workspace}") {
+                        echo "Tests passed"
+                    }
+                }
+            }
+        }
+
 
     stage('Test image') {
         app.inside {
