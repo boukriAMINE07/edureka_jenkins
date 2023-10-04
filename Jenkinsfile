@@ -21,8 +21,7 @@ node {
   stage('Test image') {
     steps {
         script {
-            def workspace = pwd()
-            app.inside("-w ${workspace}/workspace") {
+            app.inside("-w C:/workspace") {
                 echo "Tests passed"
             }
         }
