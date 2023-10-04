@@ -10,8 +10,9 @@ node {
     stage('Build image') {
         /* This builds the actual image; synonymous to
          * docker build on the command line */
-
-        app = docker.build("edureka1/edureka")
+        sh 'echo "start build image"'
+        app = docker.build("boukri/edureka")
+        sh 'echo "end build image"'
     }
 
     stage('Test image') {
