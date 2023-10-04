@@ -1,8 +1,13 @@
 node {
     def app
 
-    stage('Check Docker Version') {
-                sh 'docker --version'
+     stage('Check Docker Version') {
+            steps {
+                script {
+                    def dockerPath = '/c/Program Files/Docker/Docker/resources/bin/docker'
+                    sh "${dockerPath} --version"
+                }
+            }
         }
     stage('Clone repository') {
         /* Let's make sure we have the repository cloned to our workspace */
