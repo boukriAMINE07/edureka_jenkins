@@ -21,11 +21,13 @@ node {
   stage('Test image') {
 
         script {
-            app.inside("-w C:/workspace") {
-                echo "Tests passed"
-            }
+            app.inside {
+                // Set the working directory to an absolute path inside the container
+                dir('C:\\workspace') {
+                    echo "Tests passed"
+                }
         }
-    
+
 }
 
 
