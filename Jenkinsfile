@@ -18,16 +18,17 @@ node {
         echo "end build image"
     }
 
-   stage('Test image') {
-
-                script {
-                    def workspace = pwd()
-                    app.inside("-w ${workspace}") {
-                        echo "Tests passed"
-                    }
-                }
-            
+  stage('Test image') {
+    steps {
+        script {
+            def workspace = pwd()
+            app.inside("-w ${workspace}/workspace") {
+                echo "Tests passed"
+            }
         }
+    }
+}
+
 
 
     stage('Push image') {
