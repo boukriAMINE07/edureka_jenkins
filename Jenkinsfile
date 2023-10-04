@@ -1,45 +1,14 @@
-node {
-    def app
+pipeline {
+    agent any
 
-     stage('Check Docker Version') {
+    stages {
+        stage('Check Docker Version') {
             steps {
                 script {
                     def dockerPath = '/c/Program Files/Docker/Docker/resources/bin/docker'
                     sh "${dockerPath} --version"
                 }
             }
-        }
-    stage('Clone repository') {
-        /* Let's make sure we have the repository cloned to our workspace */
-
-        checkout scm
-    }
-
-   stage('Build image') {
-    /* This builds the actual image using 'sh' for compatibility with non-Windows nodes */
-    sh 'echo "start build image"'
-    app = sh(script: 'docker build -t boukri/edureka .', returnStdout: true).trim()
-    sh 'echo "end build image"'
-}
-
-
-    stage('Test image') {
-        /* Ideally, we would run a test framework against our image.
-         * For this example, we're using a Volkswagen-type approach ;-) */
-
-        app.inside {
-            sh 'echo "Tests passed"'
-        }
-    }
-
-    stage('Push image') {
-        /* Finally, we'll push the image with two tags:
-         * First, the incremental build number from Jenkins
-         * Second, the 'latest' tag.
-         * Pushing multiple tags is cheap, as all the layers are reused. */
-        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
         }
     }
 }
