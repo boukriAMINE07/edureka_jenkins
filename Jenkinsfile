@@ -12,7 +12,13 @@ node {
         checkout scm
     }
 
-    stage('Test image') {
+    stage('Build image') {
+        echo "start build image"
+        app = docker.build("boukri/edureka")
+        echo "end build image"
+    }
+
+   stage('Test image') {
             steps {
                 script {
                     def workspace = pwd()
@@ -23,12 +29,6 @@ node {
             }
         }
 
-
-    stage('Test image') {
-        app.inside {
-            echo "Tests passed"
-        }
-    }
 
     stage('Push image') {
         docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
