@@ -13,11 +13,12 @@ node {
     }
 
    stage('Test image') {
-    script {
-        def workspacePath = env.WORKSPACE.replace("\\", "/")  // Replace backslashes with forward slashes
-        bat "docker run -d -t -w ${workspacePath} -v ${workspacePath}:${workspacePath} boukri/edureka echo 'Tests passed'"
+        script {
+            def workspacePath = env.WORKSPACE.replace("\\", "/")  // Replace backslashes with forward slashes
+            bat "docker run -d -t -v ${workspacePath}:${workspacePath} boukri/edureka cmd /C \"cd ${workspacePath} && echo Tests passed\""
+        }
     }
-}
+
 
 
     stage('Push image') {
