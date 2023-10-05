@@ -12,20 +12,9 @@ node {
         echo "end build image"
     }
 
-  stage('Test image') {
-
-                script {
-                    app.inside {
-                        // Set the working directory to an absolute path inside the container
-                        dir('C:/workspace') {
-                            echo "Tests passed"
-                        }
-                }
-
-                }
-  }
-
-
+    stage('Test image') {
+    bat "docker run -d -t -w /$PWD -v /$PWD:/$PWD boukri/edureka echo 'Tests passed'"
+    }
 
     stage('Push image') {
         docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
