@@ -17,7 +17,7 @@ node {
                 script {
                     app.inside {
                         // Set the working directory to an absolute path inside the container
-                        dir('C:\\workspace') {
+                        dir('C:/workspace') {
                             echo "Tests passed"
                         }
                 }
