@@ -20,9 +20,10 @@ node {
         bat "docker rm -f ${containerName}"  // Force removal of the container if it exists
 
         // Remove the old container if it exists, and run tests inside the container
-        bat "docker run --name ${containerName} -v ${workspacePath}:${containerTestPath} -w ${containerTestPath} boukri/edureka bash -c 'cp -r ${containerTestPath} /tests && echo Tests passed'"
+        bat """docker run --name ${containerName} -v ${workspacePath}:${containerTestPath} -w ${containerTestPath} boukri/edureka bash -c 'cp -r ${containerTestPath} /tests && echo Tests passed'"""
     }
 }
+
 
     stage('Push image') {
         docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
