@@ -12,9 +12,13 @@ node {
         echo "end build image"
     }
 
-    stage('Test image') {
-    bat "docker run -d -t -w /$PWD -v /$PWD:/$PWD boukri/edureka echo 'Tests passed'"
+   stage('Test image') {
+    script {
+        def workspacePath = env.WORKSPACE.replace("\\", "/")  // Replace backslashes with forward slashes
+        bat "docker run -d -t -w ${workspacePath} -v ${workspacePath}:${workspacePath} boukri/edureka echo 'Tests passed'"
     }
+}
+
 
     stage('Push image') {
         docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
