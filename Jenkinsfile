@@ -1,11 +1,5 @@
 node {
 
-    agent {
-        docker {
-            image 'boukri/edureka'
-            args '-v C:/ProgramData/Jenkins/.jenkins/workspace/edureka:/workspace -w /workspace'
-        }
-    }
     def app
 
     stage('Clone repository') {
@@ -20,15 +14,16 @@ node {
 
   stage('Test image') {
 
-        script {
-            app.inside {
-                // Set the working directory to an absolute path inside the container
-                dir('C:\\workspace') {
-                    echo "Tests passed"
+                script {
+                    app.inside {
+                        // Set the working directory to an absolute path inside the container
+                        dir('C:\\workspace') {
+                            echo "Tests passed"
+                        }
                 }
-        }
 
-}
+                }
+  }
 
 
 
@@ -39,3 +34,4 @@ node {
         }
     }
 }
+
