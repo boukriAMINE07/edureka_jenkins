@@ -12,12 +12,19 @@ node {
         echo "end build image"
     }
 
-   stage('Test image') {
-        script {
-            def workspacePath = env.WORKSPACE.replace("\\", "/")  // Replace backslashes with forward slashes
-            bat "docker run -d -t -v ${workspacePath}:${workspacePath} boukri/edureka cmd /C \"cd ${workspacePath} && echo Tests passed\""
-        }
+stage('Test image') {
+    script {
+        def workspacePath = env.WORKSPACE.replace("\\", "/")  // Replace backslashes with forward slashes
+        def containerTestPath = "/workspace_tests"  // Path inside the container to copy the test files
+
+        // Copy test files or scripts to the container
+        bat "docker run -v ${workspacePath}:${containerTestPath} -w ${containerTestPath} boukri/edureka cp -r ${containerTestPath} /tests"
+
+        // Run tests inside the container
+        bat "docker run -w /tests boukri/edureka cmd /C \"echo Tests passed\""
     }
+}
+
 
 
 
