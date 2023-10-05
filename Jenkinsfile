@@ -21,9 +21,10 @@ stage('Test image') {
         bat "docker run -v ${workspacePath}:${containerTestPath} -w ${containerTestPath} boukri/edureka cp -r ${containerTestPath} /tests"
 
         // Run tests inside the container
-        bat "docker run -w /tests boukri/edureka cmd /C \"echo Tests passed\""
+        bat "docker run -w /tests boukri/edureka echo 'Tests passed'"
     }
 }
+
 
 
 
