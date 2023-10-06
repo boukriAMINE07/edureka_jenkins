@@ -25,7 +25,7 @@ pipeline {
         stage('Build image') {
             steps {
                 script {
-                    def app = docker.build("edureka1/edureka")
+                    def app = dockerHome.build("edureka1/edureka")
                 }
             }
         }
