@@ -1,11 +1,11 @@
 pipeline {
     agent any
-     def app
+
     tools {
         // Define a Docker tool named 'myDocker'
         dockerTool 'myDocker'
     }
-
+    def app
     stages {
         stage('Initialize') {
             steps {
