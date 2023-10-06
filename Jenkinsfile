@@ -1,24 +1,11 @@
 pipeline {
     agent any
 
-    tools {
-        dockerTool 'myDocker'
-    }
-
     environment {
         app = null
     }
 
     stages {
-        stage('Initialize') {
-            steps {
-                script {
-                    def dockerHome = tool 'myDocker'
-                    env.PATH = "${dockerHome}/bin:${env.PATH}"
-                }
-            }
-        }
-
         stage('Clone repository') {
             steps {
                 checkout scm
@@ -28,7 +15,11 @@ pipeline {
         stage('Build image') {
             steps {
                 script {
-                    app = docker.build("edureka1/edureka")
+                    // Build Docker image using the specified volume mappings
+                    app = docker.image("edureka1/edureka").inside("--volume /var/run/docker.sock:/var/run/docker.sock") {
+                        // Perform actions inside the Docker container
+                        sh 'docker build -t edureka1/edureka .'
+                    }
                 }
             }
         }
@@ -36,9 +27,10 @@ pipeline {
         stage('Test image') {
             steps {
                 script {
-                        app.inside {
-                            sh 'echo "Tests passed"'
-                        }
+                    // Run tests inside the Docker container
+                    app.inside("--volume /var/run/docker.sock:/var/run/docker.sock") {
+                        sh 'echo "Tests passed"'
+                    }
                 }
             }
         }
@@ -46,11 +38,11 @@ pipeline {
         stage('Push image') {
             steps {
                 script {
-
-                        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                            app.push("${env.BUILD_NUMBER}")
-                            app.push("latest")
-                        }
+                    // Push the Docker image using the specified volume mappings
+                    app.inside("--volume /var/run/docker.sock:/var/run/docker.sock") {
+                        sh "docker push edureka1/edureka:${env.BUILD_NUMBER}"
+                        sh "docker push edureka1/edureka:latest"
+                    }
                 }
             }
         }
