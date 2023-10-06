@@ -2,8 +2,11 @@ pipeline {
     agent any
 
     tools {
-        // Define a Docker tool named 'myDocker'
         dockerTool 'myDocker'
+    }
+
+    environment {
+        app = null
     }
 
     stages {
@@ -25,15 +28,20 @@ pipeline {
         stage('Build image') {
             steps {
                 script {
-                    def app = docker.build("edureka1/edureka")
+                    app = docker.build("edureka1/edureka")
                 }
             }
         }
+
         stage('Test image') {
             steps {
                 script {
-                    app.inside {
-                        sh 'echo "Tests passed"'
+                    if (app) {
+                        app.inside {
+                            sh 'echo "Tests passed"'
+                        }
+                    } else {
+                        error 'Image not built. Build image stage might have failed.'
                     }
                 }
             }
@@ -42,9 +50,13 @@ pipeline {
         stage('Push image') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
+                    if (app) {
+                        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                            app.push("${env.BUILD_NUMBER}")
+                            app.push("latest")
+                        }
+                    } else {
+                        error 'Image not built. Build image stage might have failed.'
                     }
                 }
             }
