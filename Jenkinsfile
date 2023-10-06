@@ -1,6 +1,6 @@
 pipeline {
     agent any
-
+     def app
     tools {
         // Define a Docker tool named 'myDocker'
         dockerTool 'myDocker'
@@ -25,7 +25,7 @@ pipeline {
         stage('Build image') {
             steps {
                 script {
-                    def app = docker.build("edureka1/edureka")
+                     app = docker.build("edureka1/edureka")
                 }
             }
         }
