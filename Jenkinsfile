@@ -1,37 +1,36 @@
 node {
-
     def app
 
     stage('Clone repository') {
+        /* Let's make sure we have the repository cloned to our workspace */
+
         checkout scm
     }
 
     stage('Build image') {
-        echo "start build image"
-        app = docker.build("boukri/edureka")
-        echo "end build image"
+        /* This builds the actual image; synonymous to
+         * docker build on the command line */
+
+        app = docker.build("edureka1/edureka")
     }
-   stage('Test image') {
-    script {
-        def workspacePath = env.WORKSPACE.replace("\\", "/")  // Replace backslashes with forward slashes
-        def containerTestPath = "/workspace_tests"  // Path inside the container to copy the test files
-        def containerName = "edureka_tests"  // Desired name for the container
-         bat "docker rm -f ${containerName}"  
-        // Copy test files or scripts to the container
-        bat "docker run -v ${workspacePath}:${containerTestPath} -w ${containerTestPath} --name ${containerName} boukri/edureka cp -r ${containerTestPath} /tests"
 
-        // Run tests inside the container
-       // bat "docker run --name ${containerName} -w /tests boukri/edureka echo 'Tests passed'"
+    stage('Test image') {
+        /* Ideally, we would run a test framework against our image.
+         * For this example, we're using a Volkswagen-type approach ;-) */
+
+        app.inside {
+            sh 'echo "Tests passed"'
+        }
     }
-}
-
-
 
     stage('Push image') {
+        /* Finally, we'll push the image with two tags:
+         * First, the incremental build number from Jenkins
+         * Second, the 'latest' tag.
+         * Pushing multiple tags is cheap, as all the layers are reused. */
         docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
             app.push("${env.BUILD_NUMBER}")
             app.push("latest")
         }
     }
 }
-
