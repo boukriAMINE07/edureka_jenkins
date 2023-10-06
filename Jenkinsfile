@@ -5,7 +5,7 @@ pipeline {
         // Define a Docker tool named 'myDocker'
         dockerTool 'myDocker'
     }
-    def app
+
     stages {
         stage('Initialize') {
             steps {
@@ -25,11 +25,10 @@ pipeline {
         stage('Build image') {
             steps {
                 script {
-                     app = docker.build("edureka1/edureka")
+                    def app = docker.build("edureka1/edureka")
                 }
             }
         }
-
         stage('Test image') {
             steps {
                 script {
