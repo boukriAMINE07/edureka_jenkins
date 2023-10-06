@@ -36,13 +36,9 @@ pipeline {
         stage('Test image') {
             steps {
                 script {
-                    if (app) {
                         app.inside {
                             sh 'echo "Tests passed"'
                         }
-                    } else {
-                        error 'Image not built. Build image stage might have failed.'
-                    }
                 }
             }
         }
@@ -50,14 +46,11 @@ pipeline {
         stage('Push image') {
             steps {
                 script {
-                    if (app) {
+
                         docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
                             app.push("${env.BUILD_NUMBER}")
                             app.push("latest")
                         }
-                    } else {
-                        error 'Image not built. Build image stage might have failed.'
-                    }
                 }
             }
         }
