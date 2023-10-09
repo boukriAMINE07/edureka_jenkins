@@ -32,4 +32,20 @@ node {
             app.push("latest")
         }
     }
+    post {
+        success {
+            emailext (
+                to: 'boukriamine6@example.com',
+                subject: "Jenkins Pipeline - Success",
+                body: "The Jenkins pipeline succeeded for build ${env.BUILD_NUMBER}.",
+            )
+        }
+        failure {
+            emailext (
+                to: 'boukriamine6@example.com',
+                subject: "Jenkins Pipeline - Failure",
+                body: "The Jenkins pipeline failed for build ${env.BUILD_NUMBER}.",
+            )
+        }
+    }
 }
